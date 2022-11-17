@@ -3,6 +3,12 @@ import java.util.*;
 public class project2 {
 
     public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter Number of Vertices: ");
+        int n = input.nextInt();
+
+        // sanity check
         int[][] graph = {
             {0,50,45,10,0,0},
             {0,0,10,15,0,0},
@@ -11,9 +17,18 @@ public class project2 {
             {0,20,35,0,0,0},
             {0,0,0,0,3,0}
         };
-        // System.out.println(Arrays.deepToString(denseGraphGen(5)));
-        // System.out.println(Arrays.deepToString(sparseGraphGen(5)));
-        System.out.println(Arrays.toString(dijkstra(graph, 0, graph.length)));
+        // System.out.println(Arrays.toString(dijkstra(graph, 0, graph.length)));
+        // System.out.println(Arrays.deepToString(denseGraphGen(n)));
+        // System.out.println(Arrays.deepToString(sparseGraphGen(n)));
+        for(int i = 0; i < n; i++) {
+            int[][] dense = denseGraphGen(n);
+            int[][] sparse = sparseGraphGen(n);
+
+            System.out.printf("Shortest Paths of Vertex %d to All Other Vertices\n", i+1);
+            System.out.println(Arrays.toString(dijkstra(dense, i, n)));
+            System.out.println(Arrays.toString(dijkstra(sparse, i, n)));
+        }
+        
     }
     
     public static int[] dijkstra(int[][] graph, int s, int n) {
