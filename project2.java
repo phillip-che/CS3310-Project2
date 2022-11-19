@@ -5,8 +5,18 @@ public class project2 {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
+        System.out.print("Enter Number of Tests: ");
+        int tests = input.nextInt();
+
         System.out.print("Enter Number of Vertices: ");
         int n = input.nextInt();
+
+        // System.out.print("Do you want to return shortest paths of all vertices? (Y or N): ");
+        // char y = input.nextLine().charAt(0);
+
+        // if(y == 'Y' || y == 'y') {
+
+        // }
 
         // sanity check
         int[][] graph = {
@@ -24,6 +34,50 @@ public class project2 {
 
         // System.out.println(Arrays.deepToString(floydWarshall(graph, graph.length)));
 
+        long[] ddTimes = new long[tests];
+        long[] dsTimes = new long[tests];
+        long[] fdTimes = new long[tests];
+        long[] fsTimes = new long[tests];
+
+        for(int i = 0; i < tests; i++) {
+            int[][] dense = denseGraphGen(n);                                    
+            int[][] sparse = sparseGraphGen(n);
+
+            long start = System.nanoTime();
+            for(int j = 0; j < n; j++) {
+                dijkstra(dense, j, n);
+            }
+            long end = System.nanoTime();
+            long time = end - start;
+            ddTimes[i] = time;
+
+            start = System.nanoTime();
+            for(int j = 0; j < n; j++) {
+                dijkstra(sparse, j, n); 
+            }
+            end = System.nanoTime();
+            time = end - start;
+            dsTimes[i] = time;
+
+            start = System.nanoTime();
+            floydWarshall(dense, n);
+            end = System.nanoTime();
+            time = end - start;
+            fdTimes[i] = time;
+
+            start = System.nanoTime();
+            floydWarshall(sparse, n);
+            end = System.nanoTime();
+            time = end - start;
+            fsTimes[i] = time;
+        }
+
+        System.out.println("----------------------------------------------------------");
+        System.out.println("Execution Times of Dijkstra's Algorithm with Dense Graphs:\n" + Arrays.toString(ddTimes) + "\n");
+        System.out.println("Execution Times of Dijkstra's Algorithm with Sparse Graphs:\n" + Arrays.toString(dsTimes) + "\n");
+        System.out.println("Execution Times of Floyd Warshall's Algorithm with Dense Graphs:\n" + Arrays.toString(fdTimes) + "\n");
+        System.out.println("Execution Times of Floyd Warshall's Algorithm with Sparse Graphs:\n" + Arrays.toString(fsTimes));
+
         // for(int i = 0; i < n; i++) {
         //     int[][] dense = denseGraphGen(n);
         //     int[][] sparse = sparseGraphGen(n);
@@ -35,8 +89,8 @@ public class project2 {
         //     System.out.println(Arrays.deepToString(floydWarshall(sparse, n)));
         // }
 
-        int[][] dense = denseGraphGen(n);
-        int[][] sparse = sparseGraphGen(n);
+        // int[][] dense = denseGraphGen(n);                                    
+        // int[][] sparse = sparseGraphGen(n);
         
         // for(int i = 0; i < n; i++) {
         //     System.out.println(Arrays.toString(dijkstra(dense, i, n)));
@@ -44,12 +98,12 @@ public class project2 {
 
         // System.out.println(Arrays.deepToString(floydWarshall(dense, n)));
 
-
-        for(int i = 0; i < n; i++) {
-            System.out.println(Arrays.toString(dijkstra(sparse, i, n)));
-        }
         
-        System.out.println(Arrays.deepToString(floydWarshall(sparse, n)));
+        // for(int i = 0; i < n; i++) {
+        //     System.out.println(Arrays.toString(dijkstra(sparse, i, n)));
+        // }
+        
+        // System.out.println(Arrays.deepToString(floydWarshall(sparse, n)));
     }
     
     public static int[] dijkstra(int[][] graph, int s, int n) {
